@@ -368,16 +368,17 @@ onMounted(() => {
 
 /* ── INFO ── */
 .info-section {
-  background:
-    url('/bg.png') center center / auto 100% no-repeat,
-    #ffffff;
-  padding: 72px 28px;
+  background: url('/bg.png') center center / cover no-repeat, #ffffff;
+  min-height: 1000px;
+  padding: 100px 28px;
   position: relative;
   z-index: 2;
-  overflow: visible;
-  margin: -50px 0;
-  padding-top: 120px;
-  padding-bottom: 120px;
+  overflow: hidden;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .sec-eyebrow {
   font-family: 'Cormorant Garamond', serif;
