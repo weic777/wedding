@@ -16,14 +16,14 @@
     <!-- Shuttle -->
     <div class="tab-panel" :class="{ active: activeTab === 's' }">
       <div class="t-card">
-        <p class="t-intro">從 <strong>XX 捷運站 1 號出口</strong> 出發</p>
+        <p class="t-intro">從 <strong>捷運 新店站 1 號出口</strong> 出發</p>
         <div v-for="s in shuttles" :key="s.time" class="shuttle-row">
           <span class="s-time">{{ s.time }}</span>
           <div class="s-info">
             <div class="s-title">{{ s.label }}</div>
             <div class="s-bwrap">
               <div class="s-bar"><div class="s-fill" :style="{ width: s.pct + '%' }"></div></div>
-              <span class="s-reg">{{ s.registered }} / 40 人</span>
+              <span class="s-reg">{{ s.registered }} / 20 人</span>
             </div>
           </div>
         </div>
@@ -45,7 +45,7 @@
     <div class="tab-panel" :class="{ active: activeTab === 'm' }">
       <div class="t-card">
         <p style="font-size:13px;color:var(--muted);line-height:2.1;">
-          🚇 搭乘捷運至 <strong style="color:var(--ink)">XX 站</strong><br>
+          🚇 搭乘捷運至 <strong style="color:var(--ink)">新店站</strong><br>
           1 號出口步行約 5 分鐘<br><br>
           🚕 計程車 / Uber 至某某宴會廳，車資約 NT$ 150–250
         </p>
@@ -63,13 +63,13 @@ const el = ref(null)
 const tabs = [
   { id: 's', label: '🚌 接駁車' },
   { id: 'd', label: '🚗 自駕' },
-  { id: 'm', label: '🚇 捷運' },
+  { id: 'm', label: '🚇 計程車' },
 ]
 
 const shuttles = [
-  { time: '15:30', label: '第一班 · 車程約 20 分鐘', registered: 13, pct: 32 },
-  { time: '16:00', label: '第二班', registered: 8, pct: 20 },
-  { time: '16:30', label: '第三班', registered: 4, pct: 10 },
+  { time: '10:00', label: '第一班 · 車程約 20 分鐘', registered: 13, pct: 32 },
+  { time: '10:00', label: '第二班', registered: 8, pct: 20 },
+  { time: '10:30', label: '第三班', registered: 4, pct: 10 },
 ]
 
 onMounted(() => {

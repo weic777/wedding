@@ -1,6 +1,6 @@
 <template>
   <!-- Envelope intro (shows first) -->
-  <EnvelopeIntro v-if="!siteReady" @done="onEnvDone" />
+  <!-- <EnvelopeIntro v-if="!siteReady" @done="onEnvDone" /> -->
 
   <!-- Main site -->
   <div id="site" :class="{ show: siteReady }">
@@ -18,35 +18,69 @@
       <div class="ticker-inner">
         <template v-for="_ in 3" :key="_">
           <span>Chloe &amp; Matt</span><span>✦</span>
-          <span>2025 · 10 · 08</span><span>✦</span>
+          <span>2026 · 11 · 22</span><span>✦</span>
           <span>Love · Laughter · Forever</span><span>✦</span>
-          <span>台北 · 某某宴會廳</span><span>✦</span>
+          <span>新店 · 優勝美地</span><span>✦</span>
         </template>
       </div>
     </div>
 
     <!-- Date Showcase -->
     <section class="date-section reveal" ref="dateEl">
-      <div class="date-bg-year">2025</div>
-      <p class="date-eyebrow">Save the Date</p>
-      <div class="date-calendar">
-        <div class="cal-block">
-          <div class="cal-lbl">Month</div>
-          <div class="cal-num">10</div>
-          <div class="cal-sub">October</div>
+      <p class="date-eyebrow">Save the Date &nbsp;·&nbsp; 婚禮日期</p>
+      <p class="date-month">November</p>
+
+      <div class="date-row">
+        <!-- 愛心放在 date-row 層，不干擾任何邊框 -->
+        <svg class="hand-heart" viewBox="0 0 500 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="hb" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.055 0.04" numOctaves="6" seed="12" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+          <path class="heart-path hp1"
+            d="M252 158
+               C248 138, 232 110, 206 94
+               C174 74, 130 78, 106 110
+               C80 144, 84 192, 114 224
+               C140 252, 174 274, 204 300
+               C220 316, 240 338, 252 360
+               C264 338, 284 316, 302 300
+               C336 270, 374 244, 396 206
+               C422 162, 416 108, 386 78
+               C354 46, 304 50, 278 80
+               C262 98, 254 138, 252 158"
+            stroke="#8a9e78"
+            stroke-width="16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-dasharray="120 18 160 12 100 22 140 15 110 20"
+            fill="none"
+            style="filter: url(#hb)"
+          />
+        </svg>
+
+        <!-- 21 六 -->
+        <div class="date-cell">
+          <span class="dc-top">六</span>
+          <span class="dc-num">21</span>
         </div>
-        <div class="cal-block highlight">
-          <div class="cal-lbl" style="color:rgba(255,255,255,.6)">Day</div>
-          <div class="cal-num">08</div>
-          <div class="cal-sub" style="color:rgba(255,255,255,.6)">Wednesday</div>
+
+        <!-- 22 日 ← 主角 -->
+        <div class="date-cell featured">
+          <span class="dc-top">日</span>
+          <span class="dc-num">22</span>
         </div>
-        <div class="cal-block">
-          <div class="cal-lbl">Year</div>
-          <div class="cal-num">25</div>
-          <div class="cal-sub">2025</div>
+
+        <!-- 23 一 -->
+        <div class="date-cell">
+          <span class="dc-top">一</span>
+          <span class="dc-num">23</span>
         </div>
       </div>
-      <p class="date-day-name">星期三 · 下午 5:00</p>
+
+      <p class="date-meta">2026 年 11 月 22 日　·　星期日　·　早上 11:00</p>
       <p class="date-tagline"><span class="date-underline">save our date!</span></p>
     </section>
 
@@ -187,7 +221,7 @@ import HeroSection from './components/HeroSection.vue'
 import TransportSection from './components/TransportSection.vue'
 import RsvpSection from './components/RsvpSection.vue'
 
-const siteReady = ref(false)
+const siteReady = ref(true) // 開發中暫時跳過信封動畫
 const scrolled = ref(false)
 const isDragging = ref(false)
 const uploadedPhotos = ref([])
@@ -217,8 +251,8 @@ const infoCards = [
   {
     icon: '📍',
     label: 'Venue',
-    main: '某某宴會廳',
-    sub: '台北市松山區某某路 1 號<br><a href="https://maps.google.com" target="_blank">開啟地圖導航 →</a>',
+    main: '優勝美地',
+    sub: '新北市新店區頂石厝路10號<br><a href="https://share.google/qxmsBrT9yQwEkGhUK" target="_blank">開啟地圖導航 →</a>',
   },
   {
     icon: '👗',
@@ -278,13 +312,26 @@ onMounted(() => {
     scrolled.value = window.scrollY > 60
   })
 
+  // reveal 動畫（其他 section）
   const io = new IntersectionObserver(
     entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
     { threshold: 0.07 }
   )
-  ;[dateEl, infoEl, photosEl, seatingEl, timelineEl, menuEl, uploadEl].forEach(r => {
+  ;[infoEl, photosEl, seatingEl, timelineEl, menuEl, uploadEl].forEach(r => {
     if (r.value) io.observe(r.value)
   })
+
+  // date section：threshold 0.4，確保真的滾進來才觸發愛心動畫
+  const dateIo = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible')
+        dateIo.unobserve(e.target) // 只觸發一次
+      }
+    }),
+    { threshold: 0.4 }
+  )
+  if (dateEl.value) dateIo.observe(dateEl.value)
 })
 </script>
 
@@ -317,58 +364,120 @@ onMounted(() => {
 
 /* ── DATE ── */
 .date-section {
-  background: var(--white); padding: 80px 28px;
-  text-align: center; position: relative; overflow: hidden;
-}
-.date-bg-year {
-  position: absolute;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(100px, 32vw, 200px); font-weight: 300;
-  color: rgba(61,81,64,.04);
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  white-space: nowrap; pointer-events: none; letter-spacing: -4px;
+  background: var(--white);
+  padding: 80px 0 72px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 .date-eyebrow {
   font-family: 'Cormorant Garamond', serif;
   font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 36px;
+  color: var(--muted); margin-bottom: 6px;
 }
-.date-calendar {
-  display: flex; align-items: stretch; justify-content: center;
-  max-width: 340px; margin: 0 auto 36px;
-  border: 1.5px solid var(--border); border-radius: 4px; overflow: hidden;
-  position: relative; z-index: 2;
-}
-.cal-block {
-  flex: 1; padding: 20px 8px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 4px; background: var(--white);
-}
-.cal-block + .cal-block { border-left: 1.5px solid var(--border); }
-.cal-block.highlight { background: var(--green); }
-.cal-lbl {
+
+/* 大大的 November */
+.date-month {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+  font-size: clamp(36px, 10vw, 64px);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.08em;
+  color: #3d5140;
+  opacity: 0.5;
+  margin: 0 0 24px;
+  line-height: 1;
 }
-.cal-num {
+
+/* ── 三欄日曆 ── */
+.date-row {
+  display: flex;
+  align-items: stretch;
+  margin: 0 0 28px 0;
+  border-top: 2.5px solid #3d5140;
+  border-bottom: 2.5px solid #3d5140;
+  position: relative;
+}
+.date-cell {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 0;
+  border-right: 2.5px solid #3d5140;
+}
+.date-cell:first-child { border-left: none; }
+.date-cell:last-child  { border-right: none; }
+
+.dc-top {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 12px; letter-spacing: 2px;
+  color: var(--muted); opacity: .5;
+  width: 100%; text-align: center;
+  height: 44px; line-height: 44px;
+  border-bottom: 2.5px solid #3d5140;
+  flex-shrink: 0;
+  display: block;
+}
+
+.dc-num {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(42px, 12vw, 58px); font-weight: 300; line-height: 1; color: var(--ink);
+  font-size: clamp(72px, 17vw, 130px);
+  font-weight: 300; line-height: 1;
+  color: var(--muted); opacity: .25;
+  display: flex;
+  align-items: center; justify-content: center;
+  flex: 1;
+  width: 100%;
+  padding-bottom: 40px;  /* 視覺微調往上 */
 }
-.cal-block.highlight .cal-num { color: var(--white); }
-.cal-sub { font-size: 11px; letter-spacing: 1px; color: var(--muted); margin-top: 4px; }
-.date-day-name {
-  font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: 18px; color: var(--green); margin-bottom: 8px; position: relative; z-index: 2;
+
+/* ── 中間主角格 ── */
+.date-cell.featured .dc-num {
+  color: var(--ink); opacity: 1;
+  font-size: clamp(88px, 22vw, 160px);
+}
+.date-cell.featured .dc-top {
+  color: var(--ink); opacity: .65;
+}
+
+/* ── 手繪愛心：更大更下移 ── */
+.hand-heart {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -35%) rotate(-6deg);
+  width: clamp(220px, 48vw, 360px);
+  height: auto;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+.heart-path {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+}
+.date-section.visible .hp1 {
+  animation: draw-heart 2.6s cubic-bezier(.4,0,.15,1) 0s forwards;
+}
+@keyframes draw-heart {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── 下方資訊 ── */
+.date-meta {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 13px; color: var(--muted);
+  letter-spacing: 1px; margin-bottom: 16px; opacity: .7;
 }
 .date-tagline {
   font-family: 'Dancing Script', cursive;
-  font-size: clamp(26px, 7vw, 36px); color: var(--ink); position: relative; z-index: 2;
+  font-size: clamp(26px, 7vw, 38px); color: var(--ink);
 }
-.date-underline { display: inline-block; border-bottom: 2px solid var(--red); padding-bottom: 2px; }
+.date-underline { display: inline-block; border-bottom: 2.5px solid var(--green); padding-bottom: 2px; }
 
 /* ── INFO ── */
 .info-section {
-  background: url('/bg.png') center center / cover no-repeat, #ffffff;
+  background: url('/bg.png') center center / 100% 100% no-repeat, #ffffff;
   min-height: 1000px;
   padding: 100px 28px;
   position: relative;
@@ -379,6 +488,12 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+@media (max-width: 768px) {
+  .info-section {
+    background: url('/bg-m.png') center center / 100% 100% no-repeat, #ffffff;
+    min-height: 0;
+  }
 }
 .sec-eyebrow {
   font-family: 'Cormorant Garamond', serif;
