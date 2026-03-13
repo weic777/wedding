@@ -23,7 +23,7 @@
       Let's celebrate love, laughter,<br>and happily ever after!
     </p>
 
-    <p class="hero-venue-line">某某宴會廳 · 台北 · 2025</p>
+    <p class="hero-venue-line">新店 · 優勝美地 · 2026</p>
 
     <div class="scroll-cue">
       <div class="sc-line"></div>
