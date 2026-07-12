@@ -3,7 +3,7 @@
     <p class="sec-eyebrow">RSVP &nbsp;·&nbsp; 出席回覆</p>
     <h2 class="sec-title">Attendance</h2>
     <div class="sec-rule"></div>
-    <div class="deadline-badge"><span class="bdot"></span>回覆截止日 &nbsp;2025 · 09 · 20</div>
+<div class="deadline-badge" v-if="!submitted"><span class="bdot"></span>回覆截止日 &nbsp;2025 · 09 · 20</div>
 
     <div class="rsvp-form">
       <div v-if="!submitted" id="form-body">
@@ -81,7 +81,7 @@
       </div>
 
       <div v-else class="success">
-        <div class="si">🥂</div>
+<div class="si"><img src="/thanks.svg" alt="Thank you" class="si-img"></div>
         <div class="st">感謝您的回覆！</div>
         <p class="ss">期待與您共度這美好的一天<br><br>婚禮前夕將傳送給您<br>座位圖 · 流程表 · 菜單</p>
       </div>
@@ -141,26 +141,22 @@ async function doSubmit() {
   const types = guestTypes.value.slice(0, guestCount.value)
   const guestDiets = diets.value.slice(0, guestCount.value)
 
-  if (namesZh.some(n => !n.trim())) {
-    alert('請填寫每位出席者的中文姓名')
-    return
-  }
-  if (namesEn.some(n => !n.trim())) {
-    alert('請填寫每位出席者的英文姓名')
-    return
-  }
-  if (types.some(t => !t)) {
-    alert('請選擇每位出席者的年齡區間')
-    return
-  }
-  if (guestDiets.some(d => !d)) {
-    alert('請選擇每位出席者的餐飲需求')
-    return
-  }
-  if (!transport.value) {
-    alert('請選擇交通方式')
-    return
-  }
+if (namesZh.some(n => !n.trim())) {
+  alert('請填寫每位出席者的中文姓名')
+  return
+}
+if (namesZh.some(n => !/^[\u4e00-\u9fa5]+$/.test(n.trim()))) {
+  alert('中文姓名欄位請只填寫中文姓名，不要包含數字或英文喔')
+  return
+}
+if (namesEn.some(n => !n.trim())) {
+  alert('請填寫每位出席者的英文姓名')
+  return
+}
+if (namesEn.some(n => !/^[A-Za-z\s'-]+$/.test(n.trim()))) {
+  alert('英文姓名欄位請填寫英文拼音，不要包含數字或中文喔')
+  return
+}
 
   submitting.value = true
 
@@ -290,9 +286,23 @@ onMounted(() => {
 .btn-sub:disabled { opacity: .6; cursor: not-allowed; }
 
 .success { text-align: center; padding: 36px 16px; }
-.si { font-size: 48px; margin-bottom: 16px; }
-.st { font-family: 'Dancing Script', cursive; font-size: 36px; color: var(--ink); margin-bottom: 12px; }
-.ss { font-size: 14px; color: var(--muted); line-height: 2.1; }
+.si {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+}
+.si-img {
+  width: 200px;
+  height: auto;
+  display: block;
+}
+.st {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 600;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}.ss { font-size: 14px; color: var(--muted); line-height: 2.1; }
 
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
