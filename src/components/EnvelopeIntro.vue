@@ -203,7 +203,7 @@ onMounted(() => {
   box-shadow: 50px 100px 10px 5px #eeeef3;
 }
 
-/* ── 信紙：完全照原版，position absolute，top:10 left:10 ── */
+/* ── 信紙：改用 paper.jpg 材質，加一層半透明白讓文字仍然清楚 ── */
 .env-letter {
   position: absolute;
   top: 10px;
@@ -213,10 +213,21 @@ onMounted(() => {
   display: flex; align-items: center; justify-content: center;
   z-index: 15;
   border-radius: 2px;
-  background: #d8d7e5;
+  overflow: hidden;
+  background-image: url('/paper.jpg');
+  background-size: cover;
+  background-position: center;
   box-shadow: 0px 1px 7px -2px #5E5690;
 }
+/* 文字底下加一層淡白，避免材質太雜蓋過文字，可依實際圖片調整透明度或拿掉 */
+.env-letter::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255, 255, 255, 0.55);
+}
 .env-letter-body {
+  position: relative;
+  z-index: 1;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 6px;
@@ -227,41 +238,60 @@ onMounted(() => {
 .letter-date { font-family: 'Cormorant Garamond', serif; font-size: 10px; letter-spacing: 3px; color: #888; }
 .letter-sub  { font-family: 'Cormorant Garamond', serif; font-size: 9px; letter-spacing: 2px; color: #bbb; text-transform: uppercase; }
 
-/* ── 信封：完全照原版 ── */
+/* ── 信封本體：改用 paper.jpg，background-size 固定成信封尺寸，
+   讓 .env-flap 用同一張圖、同一組 background-size/position 時能無縫接續 ── */
 .envelope {
   position: relative;
   width: 300px;
   height: 180px;
-  background: linear-gradient(#cccbd7 0.5px, #7873A7 0.5px);
+  background-image: url('/paper.jpg');
+  background-size: 300px 180px;
+  background-position: top left;
+  background-repeat: no-repeat;
   cursor: pointer;
 }
 
-/* 折線（原版 ::after），z-index:25 蓋住信紙邊緣製造「紙在裡面」錯覺 */
+/* 折線：原本是實色三角形拼接，現在改成半透明黑色 + multiply，
+   讓底下的材質圖透出來，同時保留摺紙的明暗立體感。
+   數值可依你的圖片深淺再微調（alpha 越大摺痕越明顯）。 */
 .envelope::after {
   content: '';
   position: absolute;
   top: 0; left: 0;
   width: 300px; height: 180px;
   z-index: 25;
+  mix-blend-mode: multiply;
+  pointer-events: none;
   background:
-    linear-gradient(30deg,    #555184 47%, #4F4C6B 50%, #5E5690 50%) 150px 90px / 150px 90px no-repeat,
-    linear-gradient(31deg,    #5E5690 49%, #4F4C6B 50%, transparent 50%) 0px 0px / 152px 90px no-repeat,
-    linear-gradient(150deg,   #5E5690 50%, #4F4C6B 50%, #555184 53%) 0px 90px / 151px 90px no-repeat,
-    linear-gradient(148.7deg, transparent 50%, #4F4C6B 50%, #5E5690 51%) 150px 0px / 150px 90px no-repeat;
+    linear-gradient(30deg,    rgba(0,0,0,0) 47%, rgba(0,0,0,.32) 50%, rgba(0,0,0,.12) 50%) 150px 90px / 150px 90px no-repeat,
+    linear-gradient(31deg,    rgba(0,0,0,.12) 49%, rgba(0,0,0,.32) 50%, transparent 50%) 0px 0px / 152px 90px no-repeat,
+    linear-gradient(150deg,   rgba(0,0,0,.12) 50%, rgba(0,0,0,.32) 50%, rgba(0,0,0,0) 53%) 0px 90px / 151px 90px no-repeat,
+    linear-gradient(148.7deg, transparent 50%, rgba(0,0,0,.32) 50%, rgba(0,0,0,.12) 51%) 150px 0px / 150px 90px no-repeat;
 }
 
-/* ── 上蓋（取代原版 ::before，真實 DOM 讓 GSAP 能抓到） ── */
+/* ── 上蓋：從 border 三角形改成 clip-path 三角形，才能貼材質圖。
+   背景圖的 size/position 跟 .envelope 完全一致，
+   所以裁出來的三角形紋理會跟信封正面無縫接續。 ── */
 .env-flap {
   position: absolute;
   top: 0; left: 0;
-  width: 300px; height: 0;
-  /* 用 border 做三角形，和原版 ::before 完全相同 */
-  border-top: 115px solid #7873A7;
-  border-left: 150px solid transparent;
-  border-right: 150px solid transparent;
-  box-sizing: border-box;
+  width: 300px;
+  height: 115px;
+  background-image: url('/paper.jpg');
+  background-size: 300px 180px;
+  background-position: top left;
+  background-repeat: no-repeat;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
   z-index: 30;
+}
+/* 上蓋自己的明暗漸層（模擬翻蓋時的光影），同樣裁成三角形 */
+.env-flap::after {
+  content: '';
+  position: absolute; inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,.12) 0%, rgba(0,0,0,.28) 100%);
+  pointer-events: none;
 }
 
 /* ── Hero overlay ── */

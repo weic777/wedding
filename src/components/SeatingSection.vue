@@ -1,6 +1,6 @@
 <template>
   <section class="seating-section reveal" ref="seatingEl">
-    <p class="sec-eyebrow">Seating</p>
+    <p class="sec-eyebrow">Seating &nbsp;·&nbsp; 座位資訊</p>
     <h2 class="sec-title">座位圖</h2>
     <div class="sec-rule"></div>
     <div class="seating-img-wrap">
@@ -37,8 +37,7 @@ onMounted(() => {
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* SHARED */
-.sec-eyebrow { font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--green-lt); text-align: center; margin-bottom: 8px; }
+
 .sec-title { font-family: 'Dancing Script', cursive; font-size: clamp(30px,8vw,44px); color: var(--ink); text-align: center; margin-bottom: 6px; }
 .sec-rule { width: 40px; height: 1.5px; background: var(--green); margin: 0 auto 40px; }
 </style>

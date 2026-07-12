@@ -1,6 +1,6 @@
 <template>
   <section class="date-section" ref="dateEl">
-    <p class="date-eyebrow">Save the Date &nbsp;·&nbsp; 婚禮日期</p>
+    <p class="sec-eyebrow" style="margin-bottom: 20px;">Save the Date &nbsp;·&nbsp; 婚禮日期</p>
     <p class="date-month">November</p>
     <div class="date-row">
       <div class="date-cell">
@@ -56,7 +56,7 @@ onMounted(() => {
 .date-section { background: var(--white); padding: 80px 0 72px; text-align: center; position: relative; overflow: hidden; opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
 .date-section.visible { opacity: 1; transform: translateY(0); }
 .date-month { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px,10vw,64px); font-weight: 300; font-style: italic; letter-spacing: .08em; color: #3d5140; opacity: .5; margin: 0 0 24px; line-height: 1; }
-.date-eyebrow { font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+
 .date-row { display: flex; align-items: stretch; margin: 0 0 28px; border-top: 2.5px solid #3d5140; border-bottom: 2.5px solid #3d5140; }
 .date-cell { flex: 1; display: flex; flex-direction: column; align-items: center; border-right: 2.5px solid #3d5140; position: relative; }
 .date-cell:first-child { border-left: none; } .date-cell:last-child { border-right: none; }

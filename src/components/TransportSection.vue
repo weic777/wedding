@@ -6,8 +6,8 @@
 
     <!-- ══ 上半：標題區 ══ -->
     <div class="ts-header">
-      <p class="ts-eyebrow">Getting Here</p>
-      <h2 class="ts-title">Find Us</h2>
+      <p class="sec-eyebrow ts-eyebrow">Getting Here &nbsp;·&nbsp; 交通資訊</p>
+      <h2 class="sec-title ts-title">Find Us</h2>
       <div class="ts-rule"></div>
     </div>
 
@@ -43,9 +43,7 @@
             <ul class="t-list">
               <li>婚禮當天提供多班接駁車次</li>
               <li>詳細班次時間將於婚禮前通知</li>
-              <li>婚宴結束後約 21:30 提供回程接駁</li>
             </ul>
-            <p class="t-notice">接駁車座位數量有限，請於 RSVP 登記，以新人確認為準</p>
           </template>
 
           <!-- Drive -->
@@ -58,7 +56,6 @@
             </div>
             <p class="t-intro">場地備有停車場，停車位數量有限</p>
             <ul class="t-list">
-              <li>停車位以 RSVP 登記順序分配</li>
               <li>停滿後請改搭接駁車或計程車</li>
               <li>詳細停車資訊將於婚禮前另行通知</li>
             </ul>
@@ -75,9 +72,7 @@
             </div>
             <p class="t-intro">多種大眾交通方式可抵達</p>
             <ul class="t-list">
-              <li>捷運新店站 1 號出口，步行約 5 分鐘</li>
-              <li>計程車 / Uber，車資約 NT$ 150–250</li>
-              <li>公車多線於新店站附近停靠</li>
+              <li>捷運新店站 1 號出口，步行約 5 分鐘，轉乘計程車 / Uber</li>
             </ul>
           </template>
 
@@ -147,18 +142,12 @@ onMounted(() => {
 }
 
 .ts-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.75) !important;
 }
 
 .ts-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(44px, 9vw, 88px);
-  font-weight: 600; letter-spacing: 12px;
-  color: #fff; text-transform: uppercase;
-  line-height: 1; margin-bottom: 20px;
+  color: #fff;
+  margin-bottom: 20px;
 }
 
 .ts-rule {

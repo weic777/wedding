@@ -3,7 +3,7 @@
 
     <!-- 標題 -->
     <div class="menu-header">
-      <p class="sec-eyebrow">Yosemite</p>
+      <p class="sec-eyebrow">Yosemite &nbsp;·&nbsp; 婚禮菜單</p>
       <h2 class="sec-title">Menu</h2>
       <div class="sec-rule"></div>
     </div>
@@ -52,10 +52,11 @@ const photosEl = ref(null)
 const activeMenu = ref(0)
 const menuDir = ref('menu-r')
 
+const base = import.meta.env.BASE_URL
 const menuItems = [
-  { label: 'Starter',     labelZh: '前菜',              img: '/wedding/menu-Starter.jpg',    svg: '/wedding/Starter.svg' },
-  { label: 'Main Course', labelZh: '主菜',              img: '/wedding/menu-MainCourse.jpg', svg: '/wedding/MainCourse.svg' },
-  { label: 'Soup & More', labelZh: '湯品 · 飲料 · 甜點', img: '/wedding/menu-Other.jpg',      svg: '/wedding/More.svg' },
+  { label: 'Starter',     labelZh: '前菜',              img: `${base}menu-Starter.jpg`,    svg: `${base}Starter.svg` },
+  { label: 'Main Course', labelZh: '主菜',              img: `${base}menu-MainCourse.jpg`, svg: `${base}MainCourse.svg` },
+  { label: 'Soup & More', labelZh: '湯品 · 飲料 · 甜點', img: `${base}menu-Other.jpg`,      svg: `${base}More.svg` },
 ]
 
 function switchMenu(i) {
@@ -96,6 +97,7 @@ onMounted(() => {
 
 .ms-btn {
   flex: 1;
+  min-width: 0;   /* 加這行：強制三欄真正等寬，蓋掉瀏覽器預設的 min-width:auto */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,11 +145,12 @@ onMounted(() => {
 }
 .ms-label-zh {
   font-family: 'Noto Serif TC', serif;
-  font-size: 12px; letter-spacing: 1px;
+  font-size: 15px; letter-spacing: 1.5px;
   color: var(--muted);
   opacity: 0;
-  transition: opacity .35s;
-  margin-top: -6px;
+  transition: opacity .35s, color .35s;
+  margin-top: -2px;
+  font-weight: 500;
 }
 
 .ms-btn.active .ms-label {
@@ -155,7 +158,8 @@ onMounted(() => {
   opacity: 1;
 }
 .ms-btn.active .ms-label-zh {
-  opacity: .5;
+  color: var(--green);
+  opacity: 1;
 }
 
 /* ── 細分隔線（帶滑動指示器）── */
@@ -215,8 +219,6 @@ onMounted(() => {
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* SHARED */
-.sec-eyebrow { font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--green-lt); text-align: center; margin-bottom: 8px; }
-.sec-title { font-family: 'Dancing Script', cursive; font-size: clamp(30px,8vw,44px); color: var(--ink); text-align: center; margin-bottom: 6px; }
-.sec-rule { width: 40px; height: 1.5px; background: var(--green); margin: 0 auto 40px; }
+
+
 </style>

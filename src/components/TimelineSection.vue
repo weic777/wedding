@@ -29,13 +29,13 @@ const timelineScrollEl = ref(null)
 const showHint = ref(false)
 
 const timeline = [
-  { time: '16:30', title: '迎賓入席',       titleEn: 'Guest Arrival'       },
-  { time: '17:00', title: '開場白',         titleEn: 'Opening'             },
-  { time: '17:10', title: '宣讀誓言',       titleEn: 'Vows'                },
-  { time: '17:20', title: '交換戒指',       titleEn: 'Ring Exchange'       },
-  { time: '17:30', title: '新人互相致詞',   titleEn: 'Couple Speech'       },
-  { time: '17:45', title: '揭開妙緣帕',     titleEn: 'Veil Ceremony'       },
-  { time: '18:00', title: '晚宴 · 拋捧花',  titleEn: 'Dinner & Bouquet Toss' },
+  { time: '10:30', title: '迎賓入席', titleEn: 'Welcome & Arrival' },
+  { time: '11:00', title: '證婚儀式', titleEn: 'Wedding Ceremony' },
+  { time: '11:40', title: '大合照', titleEn: 'Group Photo' },
+  { time: '12:00', title: '午宴開席', titleEn: 'Grand Opening & Lunch' },
+  { time: '13:00', title: '二次進場', titleEn: 'Second Entrance & Activities' },
+  { time: '14:10', title: '歡樂大合照', titleEn: 'Group Photo' },
+  { time: '14:30', title: '送客致謝', titleEn: 'Farewell' },
 ]
 
 onMounted(() => {
@@ -77,7 +77,11 @@ onMounted(() => {
 
 <style scoped>
 .timeline-section { background: var(--white); padding: 72px 0 160px; }
-
+@media (min-width: 601px) {
+  .timeline-section {
+    padding-bottom: 240px;
+  }
+}
 /* Override sec-title font for timeline to match DRESS style */
 .tl-title {
   font-family: 'Cormorant Garamond', serif !important;

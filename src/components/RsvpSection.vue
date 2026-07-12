@@ -1,7 +1,7 @@
 <template>
   <section class="rsvp-section reveal" ref="el" id="rsvp">
-    <p class="sec-eyebrow">RSVP</p>
-    <h2 class="sec-title">出席回覆</h2>
+    <p class="sec-eyebrow">RSVP &nbsp;·&nbsp; 出席回覆</p>
+    <h2 class="sec-title">Attendance</h2>
     <div class="sec-rule"></div>
     <div class="deadline-badge"><span class="bdot"></span>回覆截止日 &nbsp;2025 · 09 · 20</div>
 
@@ -9,47 +9,50 @@
       <div v-if="!submitted" id="form-body">
         <!-- Guest Count -->
         <div class="fg">
-          <label class="fl">出席人數</label>
+          <label class="fl">出席人數<span class="req-mark">*</span></label>
           <div class="gc-row">
             <button class="gc-btn" @click="changeCount(-1)">−</button>
             <span class="gc-num">{{ guestCount }}</span>
             <button class="gc-btn" @click="changeCount(1)">＋</button>
             <span class="gc-unit">位</span>
           </div>
-          <p class="fn">✦ 包含您本人，最多可填 4 位</p>
         </div>
 
-        <!-- Guest Names -->
+        <!-- Guest Info -->
         <div class="fg">
-          <label class="fl">每位出席者姓名</label>
+          <label class="fl">出席者資訊<span class="req-mark">*</span></label>
           <div v-for="i in guestCount" :key="i" class="name-row">
             <div class="name-row-lbl">出席者 {{ i }}</div>
-            <input class="fi" :placeholder="'姓名'" v-model="guestNames[i-1]">
-            <div class="sw">
-              <select class="fs" v-model="guestTypes[i-1]" style="padding:9px 11px;font-size:13px;">
-                <option value="大人">大人</option>
-                <option value="小孩">🧒 小孩</option>
+
+            <input class="fi" placeholder="中文姓名" v-model="guestNamesZh[i-1]">
+            <input class="fi" placeholder="English Name" v-model="guestNamesEn[i-1]">
+
+            <div class="sw age-sw">
+              <select class="fs" v-model="guestTypes[i-1]">
+                <option value="" disabled>請選擇年齡區間</option>
+                <option v-for="opt in ageOpts" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
               </select>
             </div>
-          </div>
-          <p class="fn">✦ 姓名將用於製作座位桌牌，請填寫正確</p>
-        </div>
 
-        <!-- Diet -->
-        <div class="fg">
-          <label class="fl">餐飲需求</label>
-          <div class="pills">
-            <div class="p-opt" v-for="opt in dietOpts" :key="opt.value">
-              <input type="radio" :id="'d-'+opt.value" name="diet" :value="opt.value" v-model="diet">
-              <label :for="'d-'+opt.value">{{ opt.label }}</label>
+            <div class="pills diet-row">
+              <div class="p-opt" v-for="opt in dietOpts" :key="opt.value">
+                <input
+                  type="radio"
+                  :id="'d-'+i+'-'+opt.value"
+                  :name="'diet-'+i"
+                  :value="opt.value"
+                  v-model="diets[i-1]"
+                >
+                <label :for="'d-'+i+'-'+opt.value">{{ opt.label }}</label>
+              </div>
             </div>
           </div>
-          <p class="fn">✦ 自助式菜單，如有素食需求請選擇</p>
+          <p class="fn">✦ 中英文姓名將用於製作座位桌牌，請務必填寫正確</p>
         </div>
 
         <!-- Transport -->
         <div class="fg">
-          <label class="fl">交通方式</label>
+          <label class="fl">交通方式<span class="req-mark">*</span></label>
           <div class="pills">
             <div class="p-opt" v-for="opt in transOpts" :key="opt.value">
               <input type="radio" :id="'t-'+opt.value" name="trans" :value="opt.value" v-model="transport">
@@ -58,32 +61,23 @@
           </div>
 
           <div v-if="transport === '接駁'" style="margin-top:14px;">
-            <label class="fl" style="margin-bottom:8px;">接駁班次</label>
-            <div class="pills" id="shuttle-pills">
-              <div class="p-opt" v-for="s in shuttleOpts" :key="s.value">
-                <input type="radio" :id="'sh-'+s.value" name="shuttle" :value="s.value" v-model="shuttle">
-                <label :for="'sh-'+s.value" style="text-align:center;line-height:1.5;padding:8px 14px;">
-                  {{ s.value }}<br><span style="font-size:10px;opacity:.7">{{ s.seats }}</span>
-                </label>
-              </div>
-            </div>
+            <p class="fn">✦ 我們會統一為您安排接駁班次，確切時間與上車地點將於婚禮前另行通知您</p>
           </div>
 
-          <div v-if="transport === '自駕'" class="park-warn">
-            🚗 目前已登記 <strong>12 / 30</strong> 台，停滿後請改搭接駁車
+          <div v-if="transport === '自駕'" style="margin-top:14px;">
+            <p class="fn">✦ 車位數量有限，停滿後需改搭接駁車，我們會統計後另行通知您最終的交通安排</p>
           </div>
         </div>
 
         <!-- Message -->
         <div class="fg">
-          <label class="fl">祝福新人 💌</label>
-          <textarea class="fta" placeholder="留下您的祝福..." v-model="message"></textarea>
+          <label class="fl">其他想跟新人們說的</label>
+          <textarea class="fta" placeholder="留下您的訊息...（選填）" v-model="message"></textarea>
         </div>
 
-        <button class="btn-sub" @click="doSubmit">確認出席 ✦</button>
-        <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:1px;line-height:2;">
-          如需更改，請聯繫<br>Chloe: 09XX-XXX-XXX ／ Matt: 09XX-XXX-XXX
-        </p>
+        <button class="btn-sub" :disabled="submitting" @click="doSubmit">
+          {{ submitting ? '送出中...' : '確認出席' }}
+        </button>
       </div>
 
       <div v-else class="success">
@@ -96,44 +90,103 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const el = ref(null)
 const submitted = ref(false)
+const submitting = ref(false)
 const guestCount = ref(1)
-const guestNames = ref(['', '', '', ''])
-const guestTypes = ref(['大人', '大人', '大人', '大人'])
-const diet = ref('一般')
-const transport = ref('接駁')
-const shuttle = ref('')
+const guestNamesZh = ref([''])
+const guestNamesEn = ref([''])
+const guestTypes = ref([''])
+const diets = ref([''])
+const transport = ref('')
 const message = ref('')
 
+const ageOpts = [
+  { value: '大人（9歲以上）', label: '大人（9歲以上）' },
+  { value: '兒童（4-8歲）', label: '兒童（4–8歲）' },
+  { value: '幼兒（0-3歲）', label: '幼兒（0–3歲）' },
+]
 const dietOpts = [{ value: '一般', label: '一般' }, { value: '素食', label: '素食' }]
 const transOpts = [
   { value: '接駁', label: '搭接駁車' },
   { value: '自駕', label: '自行開車' },
   { value: '現場集合', label: '現場集合' },
 ]
-const shuttleOpts = [
-  { value: '15:30', seats: '13/40人' },
-  { value: '16:00', seats: '8/40人' },
-  { value: '16:30', seats: '4/40人' },
-]
 
 function changeCount(d) {
-  guestCount.value = Math.min(4, Math.max(1, guestCount.value + d))
+  const newCount = Math.max(1, guestCount.value + d)
+
+  if (newCount > guestCount.value) {
+    for (let i = guestCount.value; i < newCount; i++) {
+      guestNamesZh.value.push('')
+      guestNamesEn.value.push('')
+      guestTypes.value.push('')
+      diets.value.push('')
+    }
+  } else if (newCount < guestCount.value) {
+    guestNamesZh.value.length = newCount
+    guestNamesEn.value.length = newCount
+    guestTypes.value.length = newCount
+    diets.value.length = newCount
+  }
+
+  guestCount.value = newCount
 }
 
-function doSubmit() {
-  const names = guestNames.value.slice(0, guestCount.value)
-  if (names.some(n => !n.trim())) {
-    alert('請填寫每位出席者的姓名')
+async function doSubmit() {
+  const namesZh = guestNamesZh.value.slice(0, guestCount.value)
+  const namesEn = guestNamesEn.value.slice(0, guestCount.value)
+  const types = guestTypes.value.slice(0, guestCount.value)
+  const guestDiets = diets.value.slice(0, guestCount.value)
+
+  if (namesZh.some(n => !n.trim())) {
+    alert('請填寫每位出席者的中文姓名')
     return
   }
-  if (transport.value === '接駁' && !shuttle.value) {
-    alert('請選擇接駁班次')
+  if (namesEn.some(n => !n.trim())) {
+    alert('請填寫每位出席者的英文姓名')
     return
   }
+  if (types.some(t => !t)) {
+    alert('請選擇每位出席者的年齡區間')
+    return
+  }
+  if (guestDiets.some(d => !d)) {
+    alert('請選擇每位出席者的餐飲需求')
+    return
+  }
+  if (!transport.value) {
+    alert('請選擇交通方式')
+    return
+  }
+
+  submitting.value = true
+
+  const payload = {
+    guestCount: guestCount.value,
+    guestNamesZh: namesZh,
+    guestNamesEn: namesEn,
+    guestTypes: types,
+    diets: guestDiets,
+    transport: transport.value,
+    message: message.value,
+  }
+
+  try {
+    await fetch(import.meta.env.VITE_APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload),
+    })
+  } catch (e) {
+    // no-cors 模式下 fetch 幾乎不會拋錯，這裡當作保底，不阻擋使用者看到感謝畫面
+  } finally {
+    submitting.value = false
+  }
+
   submitted.value = true
   setTimeout(() => {
     el.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -151,16 +204,7 @@ onMounted(() => {
 
 <style scoped>
 .rsvp-section { background: var(--white); padding: 72px 28px; }
-.sec-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
-  color: var(--green-lt); text-align: center; margin-bottom: 8px;
-}
-.sec-title {
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(30px, 8vw, 44px); color: var(--ink);
-  text-align: center; margin-bottom: 6px;
-}
+
 .sec-rule { width: 40px; height: 1.5px; background: var(--green); margin: 0 auto 40px; }
 
 .deadline-badge {
@@ -170,35 +214,39 @@ onMounted(() => {
   border: 1px solid var(--green-pale);
   border-radius: 100px; padding: 6px 18px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 12px; letter-spacing: 3px; color: var(--green);
+  font-size: 14px; letter-spacing: 3px; color: var(--green);
 }
 .bdot { width: 5px; height: 5px; background: var(--green-lt); border-radius: 50%; animation: blink 2s infinite; }
 
 .rsvp-form { max-width: 440px; margin: 0 auto; }
-.fg { margin-bottom: 22px; }
+.fg { margin-bottom: 34px; }
 .fl {
-  display: block; font-size: 10px; letter-spacing: 3px;
-  color: var(--green); text-transform: uppercase; margin-bottom: 8px;
+  display: block; font-size: 20px; letter-spacing: 1px;
+  color: var(--ink); margin-bottom: 14px;
+  font-weight: 700;
 }
+.req-mark { color: var(--red); margin-left: 2px; }
 .fi, .fs, .fta {
-  width: 100%; padding: 12px 14px;
+  box-sizing: border-box;
+  width: 100%; height: 48px; padding: 0 14px;
   background: var(--cream); border: 1px solid var(--border); border-radius: 6px;
-  font-family: 'Noto Serif TC', serif; font-size: 14px; color: var(--ink);
+  font-family: 'Noto Serif TC', serif; font-size: 16px; color: var(--ink);
   outline: none; transition: border-color .25s;
   appearance: none; -webkit-appearance: none;
 }
 .fi:focus, .fs:focus, .fta:focus { border-color: var(--green); background: #fff; }
-.fta { min-height: 80px; resize: vertical; }
+.fta { height: auto; min-height: 80px; padding: 12px 14px; resize: vertical; }
 .sw { position: relative; }
 .sw::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--green-lt); pointer-events: none; }
+.age-sw { grid-column: 1/-1; }
 
 .pills { display: flex; gap: 8px; flex-wrap: wrap; }
 .p-opt { position: relative; }
 .p-opt input { position: absolute; opacity: 0; width: 0; }
 .p-opt label {
-  display: inline-block; padding: 9px 18px;
+  display: inline-block; padding: 10px 20px;
   border: 1px solid var(--border); border-radius: 100px;
-  font-size: 13px; color: var(--muted); cursor: pointer;
+  font-size: 15px; color: var(--muted); cursor: pointer;
   background: var(--cream); transition: all .22s; letter-spacing: 1px;
 }
 .p-opt input:checked + label { background: var(--green); color: #fff; border-color: var(--green); }
@@ -218,15 +266,16 @@ onMounted(() => {
   font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--ink);
   border-left: 1px solid var(--border); border-right: 1px solid var(--border);
 }
-.gc-unit { font-size: 13px; color: var(--muted); padding: 0 14px; }
+.gc-unit { font-size: 15px; color: var(--muted); padding: 0 14px; }
 
-.name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-.name-row-lbl { grid-column: 1/-1; font-size: 10px; letter-spacing: 2px; color: var(--green-lt); text-transform: uppercase; margin-bottom: 2px; }
-.fn { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+.name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.name-row-lbl { grid-column: 1/-1; font-size: 16px; letter-spacing: 1px; color: var(--green); margin-bottom: 6px; font-weight: 600; }
+.diet-row { grid-column: 1/-1; margin-top: 6px; }
+.fn { font-size: 15px; color: var(--muted); margin-top: 12px; line-height: 1.8; }
 
 .park-warn {
   background: rgba(176,48,48,.06); border: 1px solid rgba(176,48,48,.18);
-  border-radius: 6px; padding: 10px 14px; font-size: 13px;
+  border-radius: 6px; padding: 10px 14px; font-size: 14px;
   color: var(--red); line-height: 1.7; margin-top: 10px;
 }
 
@@ -238,6 +287,7 @@ onMounted(() => {
   cursor: pointer; transition: background .3s;
 }
 .btn-sub:hover { background: var(--green-lt); }
+.btn-sub:disabled { opacity: .6; cursor: not-allowed; }
 
 .success { text-align: center; padding: 36px 16px; }
 .si { font-size: 48px; margin-bottom: 16px; }
