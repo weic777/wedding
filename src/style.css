@@ -15,7 +15,11 @@
   --border:    #ddd5c2;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* 用 JS 注入的 --vh 鎖定初始視窗高度，避免手機網址列收起時跳動 */
+  height: 100%;
+}
 
 body {
   color: var(--ink);

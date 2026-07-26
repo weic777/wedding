@@ -6,95 +6,146 @@
       <path d="M-20 600 Q120 580 200 610 Q280 640 420 600" stroke="#3d5140" stroke-width="0.6" fill="none"/>
     </svg>
 
-    <p class="hero-eyebrow">You are cordially invited</p>
+    <div class="hero-content">
+      <img src="/LOGO.png" alt="Chloe & Matt" class="hero-logo">
 
-    <div class="hero-arch">
-      <!-- 換成你的照片: <img src="/your-photo.jpg" alt="Chloe & Matt"> -->
-      <div class="hero-arch-ph"><span>🌿</span>Your Photo</div>
-    </div>
+      <h1 class="hero-names">
+        Michael
+        <span class="hero-divider">
+          <span class="hero-line"></span>
+          <span class="hero-amp">&amp;</span>
+          <span class="hero-line"></span>
+        </span>
+        Weic
+      </h1>
 
-    <h1 class="hero-names">
-      Chloe<br>
-      <span class="hero-amp">&amp;</span><br>
-      Matt
-    </h1>
-
-    <p class="hero-sub">
-      Let's celebrate love, laughter,<br>and happily ever after!
-    </p>
-
-    <p class="hero-venue-line">新店 · 優勝美地 · 2026</p>
-
-    <div class="scroll-cue">
-      <div class="sc-line"></div>
-      <p class="sc-txt">scroll</p>
+      <p class="hero-date">November 22, 2026</p>
     </div>
   </section>
 </template>
 
 <style scoped>
 .hero {
-  min-height: 100svh;
-  background: var(--white);
+  min-height: calc(var(--vh, 1vh) * 100);
+  background: url('/IMG.jpg') center / cover no-repeat;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
+  align-items: center; justify-content: flex-start;
   text-align: center;
-  padding: 100px 32px 70px;
+  padding: 0 32px 70px;
+  padding-top: clamp(120px, calc(var(--vh, 1vh) * 25), 280px);
   position: relative; overflow: hidden;
 }
 .hero-lines {
   position: absolute; inset: 0; pointer-events: none; opacity: .06;
 }
-.hero-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 11px; letter-spacing: 6px; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 28px;
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-logo {
+  width: 44px;
+  height: auto;
+  margin-bottom: 20px;
   opacity: 0; animation: fadeUp .8s .1s forwards;
 }
-.hero-arch {
-  width: 150px; height: 190px;
-  border-radius: 75px 75px 6px 6px;
-  overflow: hidden; margin: 0 auto 24px;
-  background: var(--cream);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,.08);
-  opacity: 0; animation: fadeUp .8s .25s forwards;
+/* 電腦寬螢幕：logo 往上調整 */
+@media (min-width: 1200px) {
+  .hero-logo {
+    margin-top: -40px;
+  }
 }
-.hero-arch img { width: 100%; height: 100%; object-fit: cover; }
-.hero-arch-ph { color: var(--green-lt); font-size: 9px; letter-spacing: 2px; opacity: .5; text-transform: uppercase; text-align: center; }
-.hero-arch-ph span { display: block; font-size: 26px; margin-bottom: 6px; }
+
 .hero-names {
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(54px, 15vw, 80px); font-weight: 700;
-  color: var(--ink); line-height: .95;
-  opacity: 0; animation: fadeUp .8s .4s forwards;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(26px, 6vw, 36px);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--int);
+  line-height: 1.3;
+  margin-top: 110px;
+  opacity: 0; animation: fadeUp .8s .3s forwards;
+}
+
+/* 矮螢幕（iPhone SE 667、Surface Duo 720、Nest Hub 橫向 600）：再往上收 */
+@media (max-height: 800px) {
+  .hero-names {
+    margin-top: 80px;
+  }
+}
+
+/* 螢幕較高的機型（如 iPhone 14 Pro Max, 932px 高）：人名要再往下多一點 */
+@media (min-height: 850px) {
+  .hero-names {
+    margin-top: 120px;
+  }
+}
+
+/* 螢幕更高的機型（如 Zenbook Fold 1280px）：再往下更多 */
+@media (min-height: 920px) {
+  .hero-names {
+    margin-top: 200px;
+  }
+}
+
+/* 最高螢幕（iPad Pro 1366、Surface Pro 7 1368）：往下推最多 */
+@media (min-height: 1300px) {
+  .hero-names {
+    margin-top: 250px;
+  }
+}
+/* 電腦寬螢幕：名字再往下 */
+@media (min-width: 1200px) {
+  .hero-names {
+    margin-top: 150px;
+  }
+}
+.hero-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 4px auto;
+  width: 100%;
+  max-width: 160px;
+}
+.hero-line {
+  flex: 1;
+  height: 1px;
+  background: var(--green);
+  opacity: .4;
 }
 .hero-amp {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--green);
+}
+
+.hero-date {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 24px; font-style: italic; color: var(--red);
-  display: inline-block; margin: 0 6px; vertical-align: middle;
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--green);
+  margin-top: 18px;
+  opacity: 0; animation: fadeUp .8s .5s forwards;
 }
+
 .hero-sub {
-  font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: 15px; color: var(--muted);
-  margin-top: 18px; line-height: 1.7; max-width: 280px;
-  opacity: 0; animation: fadeUp .8s .55s forwards;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--green);
+  opacity: .75;
+  margin-top: 5px;
+  opacity: 0; animation: fadeUp .8s .6s forwards;
 }
-.hero-venue-line {
-  margin-top: 20px;
-  font-size: 12px; letter-spacing: 3px; color: var(--green); text-transform: uppercase;
-  opacity: 0; animation: fadeUp .8s .7s forwards;
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.scroll-cue {
-  position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  opacity: 0; animation: fadeUp .8s 1.2s forwards;
-}
-.sc-line {
-  width: 1px; height: 38px;
-  background: linear-gradient(to bottom, var(--green-lt), transparent);
-  animation: scAnim 2.4s ease-in-out infinite;
-}
-.sc-txt { font-size: 9px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; }
 </style>

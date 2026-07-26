@@ -1,5 +1,6 @@
 <template>
   <section class="date-section" ref="dateEl">
+    <div class="date-inner">
     <p class="sec-eyebrow" style="margin-bottom: 20px;">Save the Date &nbsp;·&nbsp; 婚禮日期</p>
     <p class="date-month">November</p>
     <div class="date-row">
@@ -30,6 +31,7 @@
     </div>
     <p class="date-meta">2026 年 11 月 22 日　·　星期日　·　下午 5:00</p>
     <p class="date-tagline"><span class="date-underline">save our date!</span></p>
+    </div>
   </section>
 </template>
 
@@ -41,20 +43,19 @@ const dateEl = ref(null)
 onMounted(() => {
   const dio = new IntersectionObserver(
     es => es.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible')
-        dio.unobserve(e.target)
-      }
+      if (e.isIntersecting) e.target.classList.add('visible')
+      else e.target.classList.remove('visible')
     }),
-    { threshold: 0.3 }
+    { threshold: 0.2 }
   )
   if (dateEl.value) dio.observe(dateEl.value)
 })
 </script>
 
 <style scoped>
-.date-section { background: var(--white); padding: 80px 0 72px; text-align: center; position: relative; overflow: hidden; opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
-.date-section.visible { opacity: 1; transform: translateY(0); }
+.date-section { background: var(--white); padding: 80px 0 72px; text-align: center; position: relative; overflow: hidden; }
+.date-section .date-inner { opacity: 0; transform: translateY(20px); transition: opacity .85s ease, transform .85s ease; }
+.date-section.visible .date-inner { opacity: 1; transform: translateY(0); }
 .date-month { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px,10vw,64px); font-weight: 300; font-style: italic; letter-spacing: .08em; color: #3d5140; opacity: .5; margin: 0 0 24px; line-height: 1; }
 
 .date-row { display: flex; align-items: stretch; margin: 0 0 28px; border-top: 2.5px solid #3d5140; border-bottom: 2.5px solid #3d5140; }

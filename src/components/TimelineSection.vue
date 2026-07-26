@@ -1,10 +1,10 @@
 <template>
-  <section class="timeline-section reveal" ref="timelineEl">
-    <p class="sec-eyebrow">Programme &nbsp;·&nbsp; 當日流程</p>
-    <h2 class="sec-title tl-title">Daily Schedule</h2>
-    <div class="sec-rule"></div>
+  <section class="timeline-section" ref="timelineEl">
+    <p class="sec-eyebrow tl-inner">Programme &nbsp;·&nbsp; 當日流程</p>
+    <h2 class="sec-title tl-title tl-inner">Daily Schedule</h2>
+    <div class="sec-rule tl-inner"></div>
 
-    <div class="timeline-scroll-outer" ref="timelineScrollEl">
+    <div class="timeline-scroll-outer tl-inner" ref="timelineScrollEl">
       <div class="tlh-track">
         <div class="tlh-item" v-for="(item, i) in timeline" :key="i">
           <div class="tlh-dot"></div>
@@ -15,8 +15,8 @@
       </div>
     </div>
 
-    <p class="tlh-hint" :class="{ 'hint-hidden': !showHint }">
-      ← Swipe to view full schedule &nbsp;·&nbsp; 左右滑動查看完整流程 →
+    <p class="tlh-hint tl-inner" :class="{ 'hint-hidden': !showHint }">
+      Swipe to view full schedule &nbsp;·&nbsp; 左右滑動查看完整流程
     </p>
   </section>
 </template>
@@ -41,7 +41,10 @@ const timeline = [
 onMounted(() => {
   // Fade in animation observer
   const io = new IntersectionObserver(
-    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+    es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible')
+      else e.target.classList.remove('visible')
+    }),
     { threshold: 0.07 }
   )
   if (timelineEl.value) io.observe(timelineEl.value)
@@ -189,7 +192,11 @@ onMounted(() => {
   .tlh-title { font-size: 14px; }
 }
 
-/* REVEAL override for component scope */
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+/* REVEAL: animate inner elements, not the whole section */
+.tl-inner { opacity: 0; transform: translateY(20px); transition: opacity .85s ease, transform .85s ease; }
+.timeline-section.visible .tl-inner { opacity: 1; transform: translateY(0); }
+.timeline-section.visible .tl-inner:nth-child(2) { transition-delay: .1s; }
+.timeline-section.visible .tl-inner:nth-child(3) { transition-delay: .2s; }
+.timeline-section.visible .tl-inner:nth-child(4) { transition-delay: .3s; }
+.timeline-section.visible .tl-inner:nth-child(5) { transition-delay: .4s; }
 </style>

@@ -1,15 +1,15 @@
 <template>
-  <section class="menu-section reveal" ref="photosEl">
+  <section class="menu-section" ref="photosEl">
 
     <!-- 標題 -->
-    <div class="menu-header">
+    <div class="menu-header mn-inner">
       <p class="sec-eyebrow">Yosemite &nbsp;·&nbsp; 婚禮菜單</p>
       <h2 class="sec-title">Menu</h2>
       <div class="sec-rule"></div>
     </div>
 
     <!-- 插圖選擇器：三個圖，純浮空，無任何容器感 -->
-    <div class="menu-selector">
+    <div class="menu-selector mn-inner" style="transition-delay:.12s">
       <button
         v-for="(item, i) in menuItems"
         :key="i"
@@ -24,14 +24,14 @@
     </div>
 
     <!-- 細分隔線 -->
-    <div class="menu-divider">
+    <div class="menu-divider mn-inner" style="transition-delay:.18s">
       <div class="menu-divider-track">
         <div class="menu-divider-fill" :style="{ left: activeMenu * 33.333 + '%' }"></div>
       </div>
     </div>
 
     <!-- 菜單圖片 -->
-    <div class="menu-img-stage">
+    <div class="menu-img-stage mn-inner" style="transition-delay:.26s">
       <Transition :name="menuDir">
         <img
           :key="activeMenu"
@@ -66,7 +66,10 @@ function switchMenu(i) {
 
 onMounted(() => {
   const io = new IntersectionObserver(
-    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+    es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible')
+      else e.target.classList.remove('visible')
+    }),
     { threshold: 0.07 }
   )
   if (photosEl.value) io.observe(photosEl.value)
@@ -215,9 +218,9 @@ onMounted(() => {
 .menu-l-enter-from { opacity: 0; transform: translateX(-24px); }
 .menu-l-leave-to   { opacity: 0; transform: translateX(24px); }
 
-/* REVEAL override for component scope */
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+/* REVEAL: animate inner elements, not the whole section */
+.mn-inner { opacity: 0; transform: translateY(20px); transition: opacity .85s ease, transform .85s ease; }
+.menu-section.visible .mn-inner { opacity: 1; transform: translateY(0); }
 
 
 

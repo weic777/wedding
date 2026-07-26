@@ -26,7 +26,10 @@ const infoEl = ref(null)
 
 onMounted(() => {
   const io = new IntersectionObserver(
-    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }),
+    es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible')
+      else e.target.classList.remove('visible')
+    }),
     { threshold: 0.07 }
   )
   if (infoEl.value) io.observe(infoEl.value)

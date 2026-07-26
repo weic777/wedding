@@ -1,11 +1,10 @@
 <template>
-  <section class="rsvp-section reveal" ref="el" id="rsvp">
-    <p class="sec-eyebrow">RSVP &nbsp;·&nbsp; 出席回覆</p>
-    <h2 class="sec-title">Attendance</h2>
-    <div class="sec-rule"></div>
-<div class="deadline-badge" v-if="!submitted"><span class="bdot"></span>回覆截止日 &nbsp;2025 · 09 · 20</div>
+  <section class="rsvp-section" ref="el" id="rsvp">
+    <p class="sec-eyebrow rv-inner">RSVP &nbsp;·&nbsp; 出席回覆</p>
+    <h2 class="sec-title rv-inner" style="transition-delay:.1s">Attendance</h2>
+    <div class="sec-rule rv-inner" style="transition-delay:.18s"></div>
 
-    <div class="rsvp-form">
+    <div class="rsvp-form rv-inner" style="transition-delay:.26s">
       <div v-if="!submitted" id="form-body">
         <!-- Guest Count -->
         <div class="fg">
@@ -83,7 +82,7 @@
       <div v-else class="success">
 <div class="si"><img src="/thanks.svg" alt="Thank you" class="si-img"></div>
         <div class="st">感謝您的回覆！</div>
-        <p class="ss">期待與您共度這美好的一天<br><br>婚禮前夕將傳送給您<br>座位圖 · 流程表 · 菜單</p>
+        <p class="ss">期待與您共度這美好的一天<br><br>婚禮前夕將傳送給您<br>座位圖 · 交通資訊</p>
       </div>
     </div>
   </section>
@@ -191,7 +190,10 @@ if (namesEn.some(n => !/^[A-Za-z\s'-]+$/.test(n.trim()))) {
 
 onMounted(() => {
   const io = new IntersectionObserver(
-    entries => entries.forEach(e => { if (e.isIntersecting) el.value?.classList.add('visible') }),
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) el.value?.classList.add('visible')
+      else el.value?.classList.remove('visible')
+    }),
     { threshold: 0.07 }
   )
   if (el.value) io.observe(el.value)
@@ -199,7 +201,45 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.rsvp-section { background: var(--white); padding: 72px 28px; }
+.rsvp-section {
+  position: relative;
+  background: var(--white);
+  padding: 72px 28px;
+  overflow: hidden;
+}
+
+/* 淺綠直條紋滿版底 */
+.rsvp-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    var(--green-pale) 0px,
+    var(--green-pale) 3px,
+    transparent 3px,
+    transparent 14px
+  );
+  opacity: .5;
+  z-index: 0;
+}
+
+.rsvp-section::after {
+  content: '';
+  position: absolute;
+  top: 60px; bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92%, 900px);
+  background: var(--white);
+  z-index: 0;
+}
+
+/* 讓所有內容浮在條紋背景之上 */
+.rsvp-section > * {
+  position: relative;
+  z-index: 1;
+}
 
 .sec-rule { width: 40px; height: 1.5px; background: var(--green); margin: 0 auto 40px; }
 
@@ -214,7 +254,31 @@ onMounted(() => {
 }
 .bdot { width: 5px; height: 5px; background: var(--green-lt); border-radius: 50%; animation: blink 2s infinite; }
 
-.rsvp-form { max-width: 440px; margin: 0 auto; }
+.rsvp-form {
+  max-width: 440px;
+  margin: 0 auto;
+}
+@media (min-width: 769px) {
+  .rsvp-section {
+    padding: 72px 48px;
+  }
+  .rsvp-form {
+    max-width: 820px;
+  }
+  .name-row {
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: end;
+  }
+  .name-row-lbl {
+    grid-column: 1/-1;
+  }
+  .age-sw {
+    grid-column: auto;
+  }
+  .diet-row {
+    grid-column: 1/-1;
+  }
+}
 .fg { margin-bottom: 34px; }
 .fl {
   display: block; font-size: 20px; letter-spacing: 1px;
@@ -225,12 +289,12 @@ onMounted(() => {
 .fi, .fs, .fta {
   box-sizing: border-box;
   width: 100%; height: 48px; padding: 0 14px;
-  background: var(--cream); border: 1px solid var(--border); border-radius: 6px;
+  background: #f3f4f2; border: 1px solid transparent; border-radius: 0;
   font-family: 'Noto Serif TC', serif; font-size: 16px; color: var(--ink);
-  outline: none; transition: border-color .25s;
+  outline: none; transition: background .25s, border-color .25s;
   appearance: none; -webkit-appearance: none;
 }
-.fi:focus, .fs:focus, .fta:focus { border-color: var(--green); background: #fff; }
+.fi:focus, .fs:focus, .fta:focus { background: #fff; border-color: #d9dbd6; }
 .fta { height: auto; min-height: 80px; padding: 12px 14px; resize: vertical; }
 .sw { position: relative; }
 .sw::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--green-lt); pointer-events: none; }
@@ -241,16 +305,16 @@ onMounted(() => {
 .p-opt input { position: absolute; opacity: 0; width: 0; }
 .p-opt label {
   display: inline-block; padding: 10px 20px;
-  border: 1px solid var(--border); border-radius: 100px;
+  border: none; border-radius: 0;
   font-size: 15px; color: var(--muted); cursor: pointer;
-  background: var(--cream); transition: all .22s; letter-spacing: 1px;
+  background: #f3f4f2; transition: all .22s; letter-spacing: 1px;
 }
 .p-opt input:checked + label { background: var(--green); color: #fff; border-color: var(--green); }
 
 .gc-row {
   display: flex; align-items: center;
-  background: var(--cream); border: 1px solid var(--border);
-  border-radius: 8px; overflow: hidden; width: fit-content;
+  background: #f3f4f2; border: none;
+  border-radius: 0; overflow: hidden; width: fit-content;
 }
 .gc-btn {
   width: 48px; height: 48px; border: none; background: none;
@@ -276,15 +340,17 @@ onMounted(() => {
 }
 
 .btn-sub {
-  width: 100%; padding: 17px; margin-top: 8px;
-  background: var(--green); color: #fff; border: none; border-radius: 8px;
+  width: 100%; padding: 12px 17px; margin-top: 8px; margin-bottom: 40px;
+  background: transparent;
+  color: var(--green);
+  border: 1.5px solid var(--green-lt);
+  border-radius: 0;
   font-family: 'Cormorant Garamond', serif;
   font-size: 16px; letter-spacing: 5px; text-transform: uppercase;
-  cursor: pointer; transition: background .3s;
+  cursor: pointer; transition: background .3s, color .3s;
 }
-.btn-sub:hover { background: var(--green-lt); }
+.btn-sub:hover { background: var(--green-lt); color: #fff; }
 .btn-sub:disabled { opacity: .6; cursor: not-allowed; }
-
 .success { text-align: center; padding: 36px 16px; }
 .si {
   margin-bottom: 16px;
@@ -304,6 +370,7 @@ onMounted(() => {
   margin-bottom: 12px;
 }.ss { font-size: 14px; color: var(--muted); line-height: 2.1; }
 
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity .85s ease, transform .85s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+/* REVEAL: animate inner elements, not the whole section */
+.rv-inner { opacity: 0; transform: translateY(20px); transition: opacity .85s ease, transform .85s ease; }
+.rsvp-section.visible .rv-inner { opacity: 1; transform: translateY(0); }
 </style>
