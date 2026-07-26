@@ -91,14 +91,10 @@ onMounted(() => {
   padding: 110px 24px 56px;
 }
 .ts-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
-  letter-spacing: 5px;
-  color: rgba(255, 255, 255, 0.65) !important;
-  text-transform: uppercase;
+color: rgba(255, 255, 255, 0.65) !important;
 }
 .ts-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
   font-weight: 500;
   font-size: 44px;
   letter-spacing: 4px;

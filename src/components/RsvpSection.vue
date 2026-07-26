@@ -8,27 +8,28 @@
       <div v-if="!submitted" id="form-body">
         <!-- Guest Count -->
         <div class="fg">
+          <span class="fl-en">Number of Guests</span>
           <label class="fl">出席人數<span class="req-mark">*</span></label>
           <div class="gc-row">
             <button class="gc-btn" @click="changeCount(-1)">−</button>
             <span class="gc-num">{{ guestCount }}</span>
             <button class="gc-btn" @click="changeCount(1)">＋</button>
-            <span class="gc-unit">位</span>
+            <span class="gc-unit">位 Guest(s)</span>
           </div>
         </div>
 
         <!-- Guest Info -->
         <div class="fg">
+          <span class="fl-en">Guest Details</span>
           <label class="fl">出席者資訊<span class="req-mark">*</span></label>
           <div v-for="i in guestCount" :key="i" class="name-row">
-            <div class="name-row-lbl">出席者 {{ i }}</div>
+            <div class="name-row-lbl">出席者 {{ i }} <span class="name-row-lbl-en">Guest {{ i }}</span></div>
 
-            <input class="fi" placeholder="中文姓名" v-model="guestNamesZh[i-1]">
-            <input class="fi" placeholder="English Name" v-model="guestNamesEn[i-1]">
-
+<input class="fi" placeholder="中文姓名 Chinese Name" v-model="guestNamesZh[i-1]">
+<input class="fi" placeholder="英文姓名 English Name" v-model="guestNamesEn[i-1]">
             <div class="sw age-sw">
               <select class="fs" v-model="guestTypes[i-1]">
-                <option value="" disabled>請選擇年齡區間</option>
+                <option value="" disabled>請選擇年齡區間 Select age group</option>
                 <option v-for="opt in ageOpts" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
               </select>
             </div>
@@ -46,11 +47,12 @@
               </div>
             </div>
           </div>
-          <p class="fn">✦ 中英文姓名將用於製作座位桌牌，請務必填寫正確</p>
+          <p class="fn">✦ 中英文姓名將用於製作座位桌牌，請務必填寫正確<br><span class="fn-en">Names will be used for seating cards, please fill in accurately</span></p>
         </div>
 
         <!-- Transport -->
         <div class="fg">
+          <span class="fl-en">Transportation</span>
           <label class="fl">交通方式<span class="req-mark">*</span></label>
           <div class="pills">
             <div class="p-opt" v-for="opt in transOpts" :key="opt.value">
@@ -60,29 +62,35 @@
           </div>
 
           <div v-if="transport === '接駁'" style="margin-top:14px;">
-            <p class="fn">✦ 我們會統一為您安排接駁班次，確切時間與上車地點將於婚禮前另行通知您</p>
+            <p class="fn">✦ 我們會統一為您安排接駁班次，確切時間與上車地點將於婚禮前另行通知您<br><span class="fn-en">We will arrange shuttle schedules; exact time and pickup location will be notified before the wedding</span></p>
           </div>
 
           <div v-if="transport === '自駕'" style="margin-top:14px;">
-            <p class="fn">✦ 車位數量有限，停滿後需改搭接駁車，我們會統計後另行通知您最終的交通安排</p>
+            <p class="fn">✦ 車位數量有限，停滿後需改搭接駁車，我們會統計後另行通知您最終的交通安排<br><span class="fn-en">Parking is limited; once full you'll need to use the shuttle. Final arrangements will be confirmed with you</span></p>
           </div>
         </div>
 
         <!-- Message -->
         <div class="fg">
+          <span class="fl-en">Message to the Couple</span>
           <label class="fl">其他想跟新人們說的</label>
-          <textarea class="fta" placeholder="留下您的訊息...（選填）" v-model="message"></textarea>
+          <textarea class="fta" placeholder="留下您的訊息...（選填）Leave a message... (optional)" v-model="message"></textarea>
         </div>
 
         <button class="btn-sub" :disabled="submitting" @click="doSubmit">
-          {{ submitting ? '送出中...' : '確認出席' }}
+          {{ submitting ? '送出中... Submitting...' : '確認出席 Confirm Attendance' }}
         </button>
       </div>
 
       <div v-else class="success">
-<div class="si"><img src="/thanks.svg" alt="Thank you" class="si-img"></div>
-        <div class="st">感謝您的回覆！</div>
-        <p class="ss">期待與您共度這美好的一天<br><br>婚禮前夕將傳送給您<br>座位圖 · 交通資訊</p>
+        <div class="si"><img src="/thanks.svg" alt="Thank you" class="si-img"></div>
+        <div class="st">感謝您的回覆！ <span class="st-en">Thank You!</span></div>
+        <p class="ss">
+          期待與您共度這美好的一天<br>
+          <span class="ss-en">We look forward to celebrating with you</span><br><br>
+          婚禮前夕將傳送給您<br>座位圖 · 交通資訊<br>
+          <span class="ss-en">Seating chart & transportation info will be sent before the wedding</span>
+        </p>
       </div>
     </div>
   </section>
@@ -103,15 +111,18 @@ const transport = ref('')
 const message = ref('')
 
 const ageOpts = [
-  { value: '大人（9歲以上）', label: '大人（9歲以上）' },
-  { value: '兒童（4-8歲）', label: '兒童（4–8歲）' },
-  { value: '幼兒（0-3歲）', label: '幼兒（0–3歲）' },
+  { value: '大人（9歲以上）', label: '大人（9歲以上） Adult (9+)' },
+  { value: '兒童（4-8歲）', label: '兒童（4–8歲） Child (4–8)' },
+  { value: '幼兒（0-3歲）', label: '幼兒（0–3歲） Infant (0–3)' },
 ]
-const dietOpts = [{ value: '一般', label: '一般' }, { value: '素食', label: '素食' }]
+const dietOpts = [
+  { value: '一般', label: '一般 General' },
+  { value: '素食', label: '素食 Vegetarian' },
+]
 const transOpts = [
-  { value: '接駁', label: '搭接駁車' },
-  { value: '自駕', label: '自行開車' },
-  { value: '現場集合', label: '現場集合' },
+  { value: '接駁', label: '搭接駁車 Shuttle' },
+  { value: '自駕', label: '自行開車 Self Drive' },
+  { value: '現場集合', label: '現場集合 Meet On-site' },
 ]
 
 function changeCount(d) {
@@ -280,6 +291,13 @@ onMounted(() => {
   }
 }
 .fg { margin-bottom: 34px; }
+.fl-en {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--green-lt);
+  margin-bottom: 4px;
+}
 .fl {
   display: block; font-size: 20px; letter-spacing: 1px;
   color: var(--ink); margin-bottom: 14px;
@@ -326,12 +344,14 @@ onMounted(() => {
   font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--ink);
   border-left: 1px solid var(--border); border-right: 1px solid var(--border);
 }
-.gc-unit { font-size: 15px; color: var(--muted); padding: 0 14px; }
+.gc-unit { font-size: 14px; color: var(--muted); padding: 0 14px; white-space: nowrap; }
 
 .name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
 .name-row-lbl { grid-column: 1/-1; font-size: 16px; letter-spacing: 1px; color: var(--green); margin-bottom: 6px; font-weight: 600; }
+.name-row-lbl-en { font-size: 12px; color: var(--green-lt); font-weight: 400; letter-spacing: .5px; }
 .diet-row { grid-column: 1/-1; margin-top: 6px; }
-.fn { font-size: 15px; color: var(--muted); margin-top: 12px; line-height: 1.8; }
+.fn { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.8; }
+.fn-en { font-size: 12px; color: var(--muted); opacity: .75; font-style: italic; }
 
 .park-warn {
   background: rgba(176,48,48,.06); border: 1px solid rgba(176,48,48,.18);
@@ -346,7 +366,7 @@ onMounted(() => {
   border: 1.5px solid var(--green-lt);
   border-radius: 0;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 16px; letter-spacing: 5px; text-transform: uppercase;
+  font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
   cursor: pointer; transition: background .3s, color .3s;
 }
 .btn-sub:hover { background: var(--green-lt); color: #fff; }
@@ -368,7 +388,17 @@ onMounted(() => {
   font-size: 28px;
   color: var(--ink);
   margin-bottom: 12px;
-}.ss { font-size: 14px; color: var(--muted); line-height: 2.1; }
+}
+.st-en {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--green-lt);
+  font-weight: 500;
+  margin-top: 6px;
+}
+.ss { font-size: 14px; color: var(--muted); line-height: 2.1; }
+.ss-en { font-size: 12px; color: var(--muted); opacity: .75; font-style: italic; }
 
 /* REVEAL: animate inner elements, not the whole section */
 .rv-inner { opacity: 0; transform: translateY(20px); transition: opacity .85s ease, transform .85s ease; }

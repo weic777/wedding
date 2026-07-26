@@ -1,6 +1,6 @@
 <template>
   <section class="timeline-section" ref="timelineEl">
-    <p class="sec-eyebrow tl-inner">Programme &nbsp;·&nbsp; 當日流程</p>
+    <p class="sec-eyebrow tl-inner">Reception&nbsp;·&nbsp; 當日流程</p>
     <h2 class="sec-title tl-title tl-inner">Daily Schedule</h2>
     <div class="sec-rule tl-inner"></div>
 
